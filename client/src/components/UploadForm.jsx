@@ -18,8 +18,8 @@ const UploadForm = ({ onUploadSuccess }) => {
 
     try {
       setStatus("Uploading...");
-      const res =await axios.post("http://localhost:5000/api/models", formData); // ✅ CORRECT
-
+const res = await axios.get('https://3d-model-api.onrender.com/api/models');
+      
       setStatus("✅ Upload successful!");
       setFile(null);
       onUploadSuccess();
