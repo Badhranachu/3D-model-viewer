@@ -1,55 +1,61 @@
-import React, { useState } from "react";
-import axios from "axios";
+// UploadForm.jsx
 
-const UploadForm = ({ onUploadSuccess }) => {
+import React, { useState } from 'react';
+
+function UploadForm({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
-  const [status, setStatus] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    setError('');
   };
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    if (!file) return alert("Please select a .glb file");
+  const handleUpload = async () => {
+    if (!file) {
+      setError('Please select a file first.');
+      return;
+    }
 
     const formData = new FormData();
-    formData.append("model", file);
+formData.append('model', file);  // ✅ Must match 'model' in backend
 
     try {
-      setStatus("Uploading...");
-const res = await axios.get('https://3d-model-api.onrender.com/api/models');
-      
-      setStatus("✅ Upload successful!");
-      setFile(null);
-      onUploadSuccess();
+      setUploading(true);
+      const res = await fetch('http://localhost:5000/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        onUploadSuccess(data.url);
+      } else {
+        setError('Upload failed.');
+      }
     } catch (err) {
       console.error(err);
-      setStatus("❌ Upload failed.");
+      setError('An error occurred.');
+    } finally {
+      setUploading(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleUpload}
-      className="bg-light p-4 mb-4 rounded border shadow-sm"
-    >
-      <div className="mb-3">
-        <input
-          type="file"
-          accept=".glb"
-          className="form-control"
-          onChange={handleFileChange}
-        />
-      </div>
-      <button type="submit" className="btn btn-primary w-100">
-        Upload 3D Model
+    <div className="p-4 border rounded shadow max-w-md mx-auto">
+      <input type="file" accept=".glb" onChange={handleFileChange} />
+      <button
+        onClick={handleUpload}
+        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        disabled={uploading}
+      >
+        {uploading ? 'Uploading...' : 'Upload Model'}
       </button>
-      {status && (
-        <div className="text-center mt-2 text-secondary small">{status}</div>
-      )}
-    </form>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+    </div>
   );
-};
+}
 
 export default UploadForm;
