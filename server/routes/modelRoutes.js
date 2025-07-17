@@ -39,13 +39,20 @@ router.post("/", upload.single("model"), async (req, res) => {
 
 // ✅ GET /api/models — Get all uploaded models
 // GET /api/models
+// GET all models with full filepath URL
 router.get("/", async (req, res) => {
   try {
-    const models = await Model3D.find().sort({ uploadedAt: -1 });
-    res.json(models);
-  } catch (err) {
-    console.error("❌ Failed to fetch models:", err); // 👈 log the exact error
-    res.status(500).json({ error: "Failed to fetch models" });
+    const models = await Model.find().sort({ uploadedAt: -1 });
+
+    // Add full URL prefix for Render deployment
+    const updatedModels = models.map((model) => ({
+      ...model._doc,
+      filepath: `https://3d-model-api.onrender.com/${model.filepath}`,
+    }));
+
+    res.json(updatedModels);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch models", error });
   }
 });
 
