@@ -1,3 +1,4 @@
+// routes/upload.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -5,32 +6,36 @@ const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Model3D = require("../models/Model3D");
 
-// Cloudinary config (make sure already configured in server.js or here)
+// Configure cloudinary (or do this globally)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: '3d-models',
-    resource_type: 'raw', // important for .glb
-    format: async () => 'glb', // force format
+    resource_type: 'raw',
+    format: async () => 'glb',
     public_id: (req, file) => file.originalname.split('.')[0],
   },
 });
 
 const upload = multer({ storage });
 
-// ✅ Upload route
 router.post("/upload", upload.single("model"), async (req, res) => {
   try {
     if (!req.file || !req.file.path) {
-      console.error("❌ No file uploaded or path missing.");
       return res.status(400).json({ success: false, message: "No file uploaded" });
     }
 
-    console.log("📦 Uploaded to Cloudinary:", req.file.path);
-
     const newModel = new Model3D({
       filename: req.file.originalname,
-      filepath: req.file.path,
+      cloudinaryUrl: req.file.path,
+      cloudinaryId: req.file.filename,
+      uploadedAt: new Date()
     });
 
     const savedModel = await newModel.save();
