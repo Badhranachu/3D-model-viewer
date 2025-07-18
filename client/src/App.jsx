@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ModelViewer from "./components/ModelViewer";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+
 
 const App = () => {
   const [models, setModels] = useState([]);
@@ -36,7 +38,8 @@ const App = () => {
     formData.append("model", file); // "model" should match multer field
 
     try {
-      const response = await fetch("https://threed-model-viewer-qftb.onrender.com/upload", {
+const response = await fetch("https://threed-model-viewer-qftb.onrender.com/api/upload", {
+
         method: "POST",
         body: formData,
       });
