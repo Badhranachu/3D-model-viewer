@@ -10,7 +10,7 @@ const UploadForm = () => {
     if (!file) return alert("Select a .glb file");
 
     const formData = new FormData();
-    formData.append("model", file); // ✅ field name must match backend: 'model'
+formData.append("model", file); // ✅ field name "model"
     formData.append("uploaderName", "Badhran"); // optional
     formData.append("description", "Demo model"); // optional
 
