@@ -1,13 +1,13 @@
-// server/models/Model3D.js
 const mongoose = require("mongoose");
 
-const modelSchema = new mongoose.Schema({
+const model3DSchema = new mongoose.Schema({
   filename: String,
-  filepath: String,
+  cloudinaryUrl: String,
+  public_id: String,
   uploadedAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model("Model3D", modelSchema);
+module.exports = mongoose.model("Model3D", model3DSchema);

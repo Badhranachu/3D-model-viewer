@@ -1,60 +1,62 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+const cloudinary = require("../config/cloudinary");
 const Model3D = require("../models/Model3D");
 
 const router = express.Router();
 
-// ✅ Multer config
+// Multer temp storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
+  destination: (req, file, cb) => cb(null, "temp/"),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
+const upload = multer({ storage });
 
-const upload = multer({ storage: storage });
-
-// ✅ POST /api/models — Upload a model
+// ✅ POST /api/models — Upload 3D model to Cloudinary and save to MongoDB
 router.post("/", upload.single("model"), async (req, res) => {
   console.log("▶️ Upload request received");
 
   if (!req.file) {
-    console.log("❌ No file received");
     return res.status(400).json({ error: "No file uploaded" });
   }
 
   try {
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "raw", // use raw for 3D files
+      folder: "3d_models",
+    });
+
+    // Delete temp file
+    fs.unlinkSync(req.file.path);
+
+    // Save metadata to MongoDB
     const newModel = new Model3D({
-      filename: req.file.filename,
-      filepath: req.file.path.replace(/\\/g, "/"),
+      filename: req.file.originalname,
+      cloudinaryUrl: result.secure_url,
+      public_id: result.public_id,
     });
 
     const savedModel = await newModel.save();
-    console.log("✅ Saved model:", savedModel);
+
     res.status(201).json({ message: "Model uploaded successfully", model: savedModel });
   } catch (err) {
     console.error("❌ Upload failed:", err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Upload failed" });
   }
 });
 
-// ✅ GET /api/models — Get all uploaded models
-// GET /api/models
-// GET all models with full filepath URL
+// ✅ GET /api/models — List all uploaded models from MongoDB
 router.get("/", async (req, res) => {
   try {
-    const models = await Model.find().sort({ uploadedAt: -1 });
-
-    // Add full URL prefix for Render deployment
-    const updatedModels = models.map((model) => ({
-      ...model._doc,
-      filepath: `https://3d-model-api.onrender.com/${model.filepath}`,
-    }));
-
-    res.json(updatedModels);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch models", error });
+    const models = await Model3D.find().sort({ createdAt: -1 });
+    res.json(models);
+  } catch (err) {
+    console.error("❌ Error fetching models:", err.message);
+    res.status(500).json({ error: "Failed to fetch models" });
   }
 });
-
 
 module.exports = router;
