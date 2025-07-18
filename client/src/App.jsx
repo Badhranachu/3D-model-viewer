@@ -70,15 +70,16 @@ const App = () => {
 
       {/* Display Models */}
       {models.length > 0 ? (
-        models.map((model) =>
-          model.filepath ? (
-            <ModelViewer key={model._id} url={model.filepath} />
+        models.map((model) => {
+          const url = model.filepath;
+          return url ? (
+            <ModelViewer key={model._id} url={url} />
           ) : (
             <p key={model._id}>⚠️ Missing file URL</p>
-          )
-        )
+          );
+        })
       ) : (
-        <p>No models found.</p>
+        <p>No models available yet.</p>
       )}
     </div>
   );

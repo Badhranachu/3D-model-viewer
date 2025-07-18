@@ -33,8 +33,8 @@ router.post("/upload", upload.single("model"), async (req, res) => {
 
     const newModel = new Model3D({
       filename: req.file.originalname,
-      cloudinaryUrl: req.file.path,
-      cloudinaryId: req.file.filename,
+      filepath: req.file.path,         // ✅ Cloudinary URL
+      cloudinaryId: req.file.filename, // ✅ Public ID from Cloudinary
       uploadedAt: new Date()
     });
 
@@ -46,5 +46,6 @@ router.post("/upload", upload.single("model"), async (req, res) => {
     return res.status(500).json({ success: false, message: "Upload failed", error: err.message });
   }
 });
+
 
 module.exports = router;
