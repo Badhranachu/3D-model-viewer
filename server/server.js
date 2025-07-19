@@ -10,12 +10,10 @@ const fs = require("fs"); // only once here
 dotenv.config();
 const app = express();
 
-const allowedOrigins = ["https://3d-viewer-frontend.vercel.app"];
-
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: "https://3d-viewer-frontend.vercel.app" // ✅ this is enough
 }));
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

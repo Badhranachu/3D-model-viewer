@@ -28,15 +28,15 @@ const App = () => {
 
   // 🚀 Handle file upload to backend
   const handleUpload = async () => {
-    if (!file) {
-      alert("Please select a file first.");
-      return;
-    }
+  if (!file) {
+    alert("Please select a file first.");
+    return;
+  }
 
-const formData = new FormData();
-    formData.append("model", file); // 👈 this must match your backend multer field name
+  const formData = new FormData();
+  formData.append("model", file);
 
-    try {
+  try {
   const res = await axios.post(
     "https://threed-model-viewer-qftb.onrender.com/api/models",
     formData,
@@ -46,12 +46,13 @@ const formData = new FormData();
       },
     }
   );
-  console.log("✅ Upload successful:", res.data);
+  setUploadStatus("Upload successful!");
+  fetchModels();
 } catch (err) {
-  console.error("❌ Error uploading model:", err);
+  console.error("Upload failed:", err.response?.data || err.message);
+  setUploadStatus("Upload failed.");
 }
-    setUploadStatus("Upload successful!");
-  };
+
 
   return (
     <div className="App" style={{ padding: "2rem" }}>
