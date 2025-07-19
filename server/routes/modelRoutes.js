@@ -35,7 +35,8 @@ router.post("/", upload.single("model"), async (req, res) => {
     const newModel = new Model3D({
       filename: req.file.originalname,
       cloudinaryUrl: result.secure_url,
-      public_id: result.public_id
+      public_id: result.public_id,
+      uploadedAt: new Date()
     });
 
     await newModel.save();
@@ -50,7 +51,7 @@ router.post("/", upload.single("model"), async (req, res) => {
 });
 
 // ✅ GET /api/models — List all uploaded models from MongoDB
-router.get("/models", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const models = await Model3D.find().sort({ uploadedAt: -1 });
     res.json(models);
@@ -58,6 +59,5 @@ router.get("/models", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 module.exports = router;
