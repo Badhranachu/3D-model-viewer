@@ -6,6 +6,7 @@ const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Model3D = require("../models/Model3D");
 
+
 // Configure cloudinary (or do this globally)
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

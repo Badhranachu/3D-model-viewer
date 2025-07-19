@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ModelViewer from "./components/ModelViewer";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Upload from './components/Upload';
+
 
 
 const App = () => {
@@ -38,24 +40,26 @@ const App = () => {
   formData.append("model", file);
 
   try {
-    const res = await fetch("https://threed-model-viewer-qftb.onrender.com/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+    const res = await axios.post(
+      "https://threed-model-viewer-qftb.onrender.com/api/models",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-    const data = await res.json();
-
-    if (res.ok) {
-      console.log("✅ Upload successful:", data);
-      alert("Upload successful!");
-    } else {
-      console.error("❌ Upload error", data);
-      alert("Upload failed");
-    }
+    console.log("✅ Upload successful:", res.data);
+    alert("Upload successful!");
+    setUploadStatus("✅ Model uploaded successfully.");
+    fetchModels(); // ⤴ Refresh the list
   } catch (error) {
     console.error("❌ Upload failed:", error);
+    setUploadStatus("❌ Upload failed.");
   }
 };
+
 
 
   return (
