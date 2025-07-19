@@ -40,6 +40,7 @@ const App = () => {
     try {
 const response = await fetch("https://threed-model-viewer-qftb.onrender.com/api/upload", {
 
+
         method: "POST",
         body: formData,
       });
