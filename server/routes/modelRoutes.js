@@ -24,17 +24,20 @@ router.post("/", upload.single("model"), async (req, res) => {
 
   try {
     const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "raw",
-      folder: "3d_models",
+  resource_type: "raw",
+  folder: "3d_models",
     });
 
     fs.unlinkSync(req.file.path); // delete temp file
 
-    const newModel = new Model3D({
-      filename: req.file.originalname,
-      cloudinaryUrl: result.secure_url,
-      public_id: result.public_id,
-    });
+ const newModel = new Model3D({
+  filename: req.file.originalname,
+  cloudinaryUrl: result.secure_url,
+  public_id: result.public_id,
+});
+await newModel.save();
+    console.log("✅ Model uploaded to Cloudinary:", result.secure_url);
+
 
     const savedModel = await newModel.save();
 
