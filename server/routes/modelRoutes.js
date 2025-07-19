@@ -23,32 +23,32 @@ router.post("/", upload.single("model"), async (req, res) => {
   }
 
   try {
-    const result = await cloudinary.uploader.upload(req.file.path, {
-  resource_type: "raw",
-  folder: "3d_models",
+    const filePath = req.file.path;
+
+    const result = await cloudinary.uploader.upload(filePath, {
+      resource_type: "raw",
+      folder: "3d_models"
     });
 
-    fs.unlinkSync(req.file.path); // delete temp file
+    fs.unlinkSync(filePath); // Delete temp file
 
- const newModel = new Model3D({
-  filename: req.file.originalname,
-  cloudinaryUrl: result.secure_url,
-  public_id: result.public_id,
-});
-await newModel.save();
+    const newModel = new Model3D({
+      filename: req.file.originalname,
+      cloudinaryUrl: result.secure_url,
+      public_id: result.public_id
+    });
+
+    await newModel.save();
+
     console.log("✅ Model uploaded to Cloudinary:", result.secure_url);
+    return res.status(201).json({ message: "Model uploaded successfully", model: newModel });
 
-
-    const savedModel = await newModel.save();
-
-    return res.status(201).json({ message: "Model uploaded successfully", model: savedModel });
   } catch (err) {
     console.error("❌ Upload failed:", err);
     return res.status(500).json({ error: "Upload failed" });
   }
 });
 
-// ✅ GET /api/models — List all uploaded models from MongoDB
 // ✅ GET /api/models — List all uploaded models from MongoDB
 router.get("/", async (req, res) => {
   try {
@@ -59,36 +59,5 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch models" });
   }
 });
-
-const cloudinary = require("../config/cloudinary"); // or correct path
-const fs = require("fs");
-
-router.post("/models", upload.single("model"), async (req, res) => {
-  try {
-    const filePath = req.file.path;
-
-    const result = await cloudinary.uploader.upload(filePath, {
-      resource_type: "raw",  // necessary for .glb
-      public_id: `models/${Date.now()}-${req.file.originalname}`,
-    });
-
-    // Optional: delete local file after upload
-    fs.unlinkSync(filePath);
-
-    const newModel = new Model({
-      filename: req.file.originalname,
-      cloudinaryUrl: result.secure_url,
-    });
-
-    await newModel.save();
-
-    res.status(201).json({ message: "Model uploaded", model: newModel });
-  } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({ error: "Upload failed", details: error.message });
-  }
-});
-
-
 
 module.exports = router;
