@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ModelViewer from "./components/ModelViewer";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import ModelViewer from "./components/ModelViewer";
 import Upload from './components/Upload';
-
-
 
 const App = () => {
   const [models, setModels] = useState([]);
@@ -31,36 +28,34 @@ const App = () => {
 
   // 🚀 Handle file upload to backend
   const handleUpload = async () => {
-  if (!file) {
-    alert("Please select a file first.");
-    return;
-  }
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
 
-  const formData = new FormData();
-  formData.append("model", file);
+    const formData = new FormData();
+    formData.append("model", file); // ✅ Correct field name
 
-  try {
-    const res = await axios.post(
-      "https://threed-model-viewer-qftb.onrender.com/api/models",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    try {
+      const res = await axios.post(
+        "https://threed-model-viewer-qftb.onrender.com/api/models",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    console.log("✅ Upload successful:", res.data);
-    alert("Upload successful!");
-    setUploadStatus("✅ Model uploaded successfully.");
-    fetchModels(); // ⤴ Refresh the list
-  } catch (error) {
-    console.error("❌ Upload failed:", error);
-    setUploadStatus("❌ Upload failed.");
-  }
-};
-
-
+      console.log("✅ Upload successful:", res.data);
+      alert("Upload successful!");
+      setUploadStatus("✅ Model uploaded successfully.");
+      fetchModels(); // ⤴ Refresh the list
+    } catch (error) {
+      console.error("❌ Upload failed:", error);
+      setUploadStatus("❌ Upload failed.");
+    }
+  };
 
   return (
     <div className="App" style={{ padding: "2rem" }}>
@@ -76,17 +71,17 @@ const App = () => {
 
       {/* Display Models */}
       {models.length > 0 ? (
-  models.map((model) => {
-    const url = model.cloudinaryUrl; // ✅ use correct field name
-    return url ? (
-      <ModelViewer key={model._id} url={url} />
-    ) : (
-      <p key={model._id}>⚠️ Missing file URL</p>
-    );
-  })
-) : (
-  <p>No models available yet.</p>
-)}
+        models.map((model) => {
+          const url = model.cloudinaryUrl; // ✅ CORRECT FIELD
+          return url ? (
+            <ModelViewer key={model._id} url={url} />
+          ) : (
+            <p key={model._id}>⚠️ Missing file URL</p>
+          );
+        })
+      ) : (
+        <p>No models available yet.</p>
+      )}
     </div>
   );
 };
