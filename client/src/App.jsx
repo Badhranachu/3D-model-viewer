@@ -76,17 +76,17 @@ const App = () => {
 
       {/* Display Models */}
       {models.length > 0 ? (
-        models.map((model) => {
-          const url = model.filepath;
-          return url ? (
-            <ModelViewer key={model._id} url={url} />
-          ) : (
-            <p key={model._id}>⚠️ Missing file URL</p>
-          );
-        })
-      ) : (
-        <p>No models available yet.</p>
-      )}
+  models.map((model) => {
+    const url = model.cloudinaryUrl; // ✅ use correct field name
+    return url ? (
+      <ModelViewer key={model._id} url={url} />
+    ) : (
+      <p key={model._id}>⚠️ Missing file URL</p>
+    );
+  })
+) : (
+  <p>No models available yet.</p>
+)}
     </div>
   );
 };

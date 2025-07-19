@@ -37,6 +37,11 @@ app.use("/api/models", modelRoutes);
 app.use("/api", uploadRoute);
 app.use("/api/test", testRoute);
 
+
+app.get("/", (req, res) => {
+  res.send("Backend is running...");
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error("🔥 Server Error:", err.message);

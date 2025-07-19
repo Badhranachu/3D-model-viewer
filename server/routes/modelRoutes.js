@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage });
-  
+
 // ✅ POST /api/models — Upload 3D model to Cloudinary and save to MongoDB
 router.post("/", upload.single("model"), async (req, res) => {
   console.log("▶️ Upload request received");
@@ -50,14 +50,14 @@ router.post("/", upload.single("model"), async (req, res) => {
 });
 
 // ✅ GET /api/models — List all uploaded models from MongoDB
-router.get("/", async (req, res) => {
+router.get("/models", async (req, res) => {
   try {
-    const models = await Model3D.find().sort({ createdAt: -1 });
-    res.status(200).json(models);
+    const models = await Model3D.find().sort({ uploadedAt: -1 });
+    res.json(models);
   } catch (err) {
-    console.error("❌ Error fetching models:", err.message);
-    res.status(500).json({ error: "Failed to fetch models" });
+    res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;
