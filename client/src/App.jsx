@@ -29,36 +29,34 @@ const App = () => {
 
   // 🚀 Handle file upload to backend
   const handleUpload = async () => {
-    if (!file) {
-      alert("Please select a file");
-      return;
+  if (!file) {
+    alert("Please select a file first.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("model", file);
+
+  try {
+    const res = await fetch("https://threed-model-viewer-qftb.onrender.com/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log("✅ Upload successful:", data);
+      alert("Upload successful!");
+    } else {
+      console.error("❌ Upload error", data);
+      alert("Upload failed");
     }
+  } catch (error) {
+    console.error("❌ Upload failed:", error);
+  }
+};
 
-    const formData = new FormData();
-    formData.append("model", file); // "model" should match multer field
-
-    try {
-const response = await fetch("https://threed-model-viewer-qftb.onrender.com/api/upload", {
-
-
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (result.success || response.status === 201 || response.status === 200) {
-        setUploadStatus("✅ Upload successful!");
-        setFile(null);
-        fetchModels(); // refresh model list
-      } else {
-        setUploadStatus("❌ Upload failed!");
-      }
-    } catch (error) {
-      console.error("Error uploading model:", error);
-      setUploadStatus("❌ Upload error");
-    }
-  };
 
   return (
     <div className="App" style={{ padding: "2rem" }}>
