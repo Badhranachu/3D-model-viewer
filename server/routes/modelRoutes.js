@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage });
-
+  
 // ✅ POST /api/models — Upload 3D model to Cloudinary and save to MongoDB
 router.post("/", upload.single("model"), async (req, res) => {
   console.log("▶️ Upload request received");
