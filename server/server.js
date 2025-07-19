@@ -4,23 +4,18 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs"); // only once here
-const cors = require("cors");
+// const cors = require("cors");
 
 
 dotenv.config();
 const app = express();
 
-const allowedOrigins = [
-  'https://3d-viewer-frontend.vercel.app',
-  'http://localhost:5173'
-];
+const allowedOrigins = ["https://3d-viewer-frontend.vercel.app"];
 
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
-app.use(cors());
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
