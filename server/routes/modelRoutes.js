@@ -51,6 +51,7 @@ router.post("/", upload.single("model"), async (req, res) => {
 // ✅ GET /api/models — List all uploaded models from MongoDB
 router.get("/", async (req, res) => {
   try {
+    res.send("Fetching all models...");
     const models = await Model3D.find().sort({ createdAt: -1 });
     res.json(models);
   } catch (err) {
