@@ -46,14 +46,17 @@ router.post("/", upload.single("model"), async (req, res) => {
 });
 
 // ✅ GET /api/models — List all uploaded models from MongoDB
+// ✅ GET /api/models — List all uploaded models from MongoDB
 router.get("/", async (req, res) => {
   try {
     const models = await Model3D.find().sort({ createdAt: -1 });
-    return res.status(200).json(models);
+    res.status(200).json(models);
   } catch (err) {
     console.error("❌ Error fetching models:", err.message);
-    return res.status(500).json({ error: "Failed to fetch models" });
+    res.status(500).json({ error: "Failed to fetch models" });
   }
 });
+
+
 
 module.exports = router;
