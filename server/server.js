@@ -4,6 +4,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs"); // only once here
+const cors = require("cors");
+
 
 dotenv.config();
 const app = express();
@@ -17,6 +19,8 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+app.use(cors());
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

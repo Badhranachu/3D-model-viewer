@@ -33,28 +33,24 @@ const App = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("model", file); // ✅ Correct field name
+const formData = new FormData();
+    formData.append("model", file); // 👈 this must match your backend multer field name
 
     try {
-      const res = await axios.post(
-        "https://threed-model-viewer-qftb.onrender.com/api/models",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("✅ Upload successful:", res.data);
-      alert("Upload successful!");
-      setUploadStatus("✅ Model uploaded successfully.");
-      fetchModels(); // ⤴ Refresh the list
-    } catch (error) {
-      console.error("❌ Upload failed:", error);
-      setUploadStatus("❌ Upload failed.");
+  const res = await axios.post(
+    "https://threed-model-viewer-qftb.onrender.com/api/models",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     }
+  );
+  console.log("✅ Upload successful:", res.data);
+} catch (err) {
+  console.error("❌ Error uploading model:", err);
+}
+    setUploadStatus("Upload successful!");
   };
 
   return (
