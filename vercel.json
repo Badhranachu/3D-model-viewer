@@ -1,9 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://threed-model-viewer-qftb.onrender.com/api/$1"
-    }
-  ],
-  "root": "frontend"
-}

@@ -7,24 +7,28 @@ dotenv.config();
 
 const app = express();
 
-// Add this before routes
+// ✅ Allow requests from Vercel frontend
 app.use(cors({
-  origin: 'https://3d-model-viewer-frontend-eight.vercel.app',
-  credentials: true,
+  origin: 'https://3d-model-viewer-frontend-eight.vercel.app', // Your frontend URL
+  methods: ['GET', 'POST', 'DELETE'], // Optional: Add PUT if needed
+  credentials: true
 }));
-
 
 app.use(express.json());
 
-// Connect MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+// ✅ Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB connected'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
-// Routes
+// ✅ Routes
 app.use('/api/models', modelRoutes);
 
+// ✅ Server listen
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
