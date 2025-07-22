@@ -7,12 +7,12 @@ dotenv.config();
 
 const app = express();
 
+// Add this before routes
 app.use(cors({
-  origin: [
-    'http://localhost:5173'
-  ],
+  origin: 'https://3d-model-viewer-frontend-eight.vercel.app',
   credentials: true,
 }));
+
 
 app.use(express.json());
 

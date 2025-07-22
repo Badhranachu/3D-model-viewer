@@ -1,4 +1,4 @@
-const BASE_URL = 'https://threed-model-viewer-qftb.onrender.com'; // your Render backend
+const BASE_URL = 'https://threed-model-viewerv2.onrender.com';
 
 export const getModels = async () => {
   const res = await fetch(`${BASE_URL}/api/models`);
