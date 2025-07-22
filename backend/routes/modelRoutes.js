@@ -9,8 +9,10 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 router.post('/', upload.single('file'), uploadModel);
-router.get('/', getModels,(req, res) => {
-  res.json({ message: 'GET request successful' });
-});
+// router.get('/', getModels);
+router.get('/',(req,res)=>{
+    res.send('Welcome to the 3D Model API');
+    console.log('GET request to /api/models');
+})
 
 module.exports = router;
