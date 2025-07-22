@@ -2,17 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const modelRoutes = require('./routes/modelRoutes');
-const cors = require('cors');
+// const cors = require('cors');
 dotenv.config();
 
 const app = express();
 
 // ✅ Allow requests from Vercel frontend
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'https://3d-model-viewer-frontend-eight.vercel.app', // Your frontend URL
-  methods: ['GET', 'POST', 'DELETE'], // Optional: Add PUT if needed
-  credentials: true
+  origin: 'https://3d-model-viewer-frontend-eight.vercel.app',
+  credentials: true,
 }));
+
 
 app.use(express.json());
 
