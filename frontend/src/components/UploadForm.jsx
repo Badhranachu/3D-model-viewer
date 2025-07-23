@@ -17,10 +17,11 @@ const UploadForm = () => {
     formData.append('file', file);
 
     try {
-const res = await fetch('https://threed-model-viewerv2.onrender.com/api/models', {
-        method: 'POST',
-        body: formData,
-      });
+const res = await fetch('https://threed-model-viewerv2.onrender.com/api/models/upload', {
+  method: 'POST',
+  body: formData,
+});
+
 
       const data = await res.json();
 
