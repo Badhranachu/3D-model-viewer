@@ -11,9 +11,10 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'https://3-d-model-viewer-mu.vercel.app',
+  origin: 'https://3-d-model-viewer-mu.vercel.app', // ✅ Correct frontend
   credentials: true,
 }));
+
 
 
 
