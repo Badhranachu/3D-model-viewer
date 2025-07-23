@@ -17,7 +17,7 @@ const UploadForm = () => {
     formData.append('file', file);
 
     try {
-const res = await fetch('https://threed-model-viewer-qftb.onrender.com/api/models', {
+const res = await fetch('https://threed-model-viewerv2.onrender.com/api/models', {
         method: 'POST',
         body: formData,
       });

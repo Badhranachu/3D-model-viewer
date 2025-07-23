@@ -8,7 +8,8 @@ const ModelList = () => {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const res = await fetch('https://threed-model-viewer-qftb.onrender.com/api/models');
+        const res = await fetch("https://threed-model-viewerv2.onrender.com/api/models");
+
         const data = await res.json();
         setModels(data); // assuming backend returns an array of model objects
       } catch (err) {
