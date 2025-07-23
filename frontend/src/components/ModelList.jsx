@@ -9,9 +9,8 @@ const ModelList = () => {
     const fetchModels = async () => {
       try {
         const res = await fetch("https://threed-model-viewerv2.onrender.com/api/models");
-
         const data = await res.json();
-        setModels(data); // assuming backend returns an array of model objects
+        setModels(data.reverse()); // newest first
       } catch (err) {
         console.error('Error fetching models:', err);
       } finally {
@@ -29,14 +28,24 @@ const ModelList = () => {
       <h2>Uploaded 3D Models</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
         {models.map((model) => (
-          <div key={model._id}>
-            <h4>{model.name}</h4>
+          <div
+            key={model._id}
+            style={{
+              border: '1px solid #ccc',
+              borderRadius: '12px',
+              padding: '1rem',
+              width: '320px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              backgroundColor: '#f9f9f9',
+            }}
+          >
+            <h4 style={{ textAlign: 'center', marginBottom: '1rem' }}>{model.name}</h4>
             <model-viewer
               src={model.cloudinaryUrl}
               alt={model.name}
               auto-rotate
               camera-controls
-              style={{ width: '300px', height: '300px' }}
+              style={{ width: '100%', height: '300px' }}
             />
           </div>
         ))}
