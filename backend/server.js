@@ -11,7 +11,7 @@ const app = express();
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'https://3-d-model-viewer-git-main-badhran-s-projects.vercel.app',
+  origin: 'https://3-d-model-viewer-mu.vercel.app',
   credentials: true,
 }));
 
