@@ -8,7 +8,7 @@ const router = express.Router();
 // Store in /uploads temporarily
 const upload = multer({ dest: 'uploads/' });
 
-router.post('/', upload.single('file'), uploadModel);
+router.post('/upload', upload.single('file'), uploadModel); // ✅ matches frontend
 router.get('/', getModels);
 
 module.exports = router;

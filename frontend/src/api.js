@@ -1,4 +1,4 @@
-const BASE_URL = 'https://threed-model-viewerv2.onrender.com';
+const BASE_URL = 'https://threed-model-viewerv2.onrender.com'; // ✅ Correct
 
 export const getModels = async () => {
   const res = await fetch(`${BASE_URL}/api/models`);
