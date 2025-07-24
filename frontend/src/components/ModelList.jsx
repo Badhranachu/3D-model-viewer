@@ -36,7 +36,7 @@ const ModelList = () => {
               padding: '1rem',
               width: '320px',
               boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              backgroundColor: '#f9f9f9',
+              backgroundColor: '#5a5454ff',
             }}
           >
             <h4 style={{ textAlign: 'center', marginBottom: '1rem' }}>{model.name}</h4>
