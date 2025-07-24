@@ -1,24 +1,31 @@
-// src/components/ModelList.jsx
 import React, { useEffect, useState } from 'react';
 
 const ModelList = () => {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        const res = await fetch("https://threed-model-viewerv2.onrender.com/api/models");
-        const data = await res.json();
-        setModels(data.reverse()); // newest first
-      } catch (err) {
-        console.error('Error fetching models:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Fetch models function
+  const fetchModels = async () => {
+    try {
+      const res = await fetch("https://threed-model-viewerv2.onrender.com/api/models");
+      const data = await res.json();
+      setModels(data.reverse()); // Newest first
+    } catch (err) {
+      console.error('Error fetching models:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    // Initial fetch
     fetchModels();
+
+    // Set interval to fetch every 2 seconds
+    const intervalId = setInterval(fetchModels, 2000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) return <p>Loading models...</p>;
